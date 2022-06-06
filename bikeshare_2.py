@@ -130,24 +130,41 @@ def trip_duration_stats(df):
     print('-'*40)
 
 
-def user_stats(df):
+def user_stats(df, city):
     """Displays statistics on bikeshare users."""
 
     print('\nCalculating User Stats...\n')
     start_time = time.time()
 
     # Display counts of user types
-
+    user_types = df['User Type'].value_counts().to_frame()
+    print(user_types, '\n')
 
     # Display counts of gender
-
+    if city != 'washigton':
+        print(df['Gender'].value_counts().to_frame(), '\n')
 
     # Display earliest, most recent, and most common year of birth
-
+    print('The Earliest Common Year of Birth is: ', int(df['Birth Year'].min()))
+    print('The Most Recent Common Year of Birth is: ', int(df['Birth Year'].max()))
+    print('The Most Common Year of Birth is: ', int(df['Birth Year'].mode()[0]))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+def show_data(df):
+
+    """prompt the user if they want to see 5 lines of raw data, Display that data if the answer is 'yes."""
+    #asking user if needing to view some data
+    index = 1
+    while True:
+        view = input('Would you like to view individual trip 5 line of raw data? Type \'yes\' or \'no\'.')
+        if view.lower() == 'yes':
+            print(df[index : index + 5])
+            print('-'*40)
+            index = index + 5
+        else:
+            break
 
 def main():
     while True:
@@ -157,7 +174,8 @@ def main():
         time_stats(df)
         station_stats(df)
         trip_duration_stats(df)
-        user_stats(df)
+        user_stats(df, city)
+        show_data(df)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
